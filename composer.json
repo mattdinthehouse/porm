@@ -1,0 +1,27 @@
+{
+    "name": "mattdwyercool/porm",
+    "description": "Bare bones vanilla ORM for PHP",
+    "version": "1.0.0-dev",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "PORM\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "PORM\\Example\\": "example/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Matt Dwyer-Reynolds",
+            "email": "mattsd1410@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=8.0"
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
