@@ -32,8 +32,11 @@ final class DB
 	{
 		$stmt = $this->pdo->prepare( $sql );
 
-		foreach( $params as $name => $value ) $stmt->bindValue( $name, $value );
-		
+		foreach( $params as $name => $value )
+		{
+			$stmt->bindValue( $name, $value );
+		}
+
 		return $stmt;
 	}
 
@@ -43,7 +46,7 @@ final class DB
 		$stmt = $this->pdo->prepare( $sql );
 
 		$stmt->execute( $params );
-		
+
 		return $stmt;
 	}
 }

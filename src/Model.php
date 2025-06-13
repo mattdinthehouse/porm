@@ -44,7 +44,10 @@ trait Model
 			}
 		}
 
-		foreach( self::$relationships as $property => $_ ) unset( $this->{$property} );
+		foreach( self::$relationships as $property => $_ )
+		{
+			unset( $this->{$property} );
+		}
 	}
 
 
@@ -61,9 +64,11 @@ trait Model
 	}
 
 
-	protected static function one( PDOStatement $stmt ): static
+	protected static function one( PDOStatement $stmt ): ?static
 	{
 		$record = $stmt->fetchObject( static::class );
+
+		if( !$record ) return null;
 
 		$record->prepare( [ $record ] );
 
@@ -74,9 +79,15 @@ trait Model
 	{
 		$records = [];
 
-		while( $record = $stmt->fetchObject( static::class ) ) $records[] = $record;
+		while( $record = $stmt->fetchObject( static::class ) )
+		{
+			$records[] = $record;
+		}
 
-		foreach( $records as $record ) $record->prepare( $records );
+		foreach( $records as $record )
+		{
+			$record->prepare( $records );
+		}
 
 		return $records;
 	}

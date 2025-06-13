@@ -17,11 +17,11 @@ final class Author
 
 
 	/** @var Post[] */
-	#[HasMany]
+	#[HasMany(Post::class)]
 	public array $posts;
 
 	/** @var Comment[] */
-	#[HasMany]
+	#[HasMany(Comment::class)]
 	public array $comments;
 
 
@@ -36,7 +36,7 @@ final class Author
 	}
 
 
-	public static function get( int $id ): static
+	public static function get( int $id ): ?static
 	{
 		$sql = static::sql();
 

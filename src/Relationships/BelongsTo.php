@@ -25,12 +25,15 @@ final class BelongsTo extends Relationship
 
 		$method_name = $this->method_name ?? 'list';
 
-		
+
 		$ids = array_column( $records, $local_key );
 
 		$parents = $remote_class::{$method_name}( $ids );
 		$parents = array_column( $parents, null, $remote_key );
 
-		foreach( $records as $record ) $record->{$local_property} = $parents[$record->{$local_key}] ?? null;
+		foreach( $records as $record )
+		{
+			$record->{$local_property} = $parents[$record->{$local_key}] ?? null;
+		}
 	}
 }

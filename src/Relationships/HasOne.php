@@ -26,12 +26,15 @@ final class HasOne extends Relationship
 
 		$method_name = $this->method_name ?? 'from' . $this->classBasename( $local_class ) . 's'; // TODO pluralise properly
 
-		
+
 		$ids = array_column( $records, $local_key );
 
 		$children = $remote_class::{$method_name}( $ids );
 		$children = array_column( $children, null, $remote_key );
-		
-		foreach( $records as $record ) $record->{$local_property} = $children[$record->{$local_key}] ?? null;
+
+		foreach( $records as $record )
+		{
+			$record->{$local_property} = $children[$record->{$local_key}] ?? null;
+		}
 	}
 }

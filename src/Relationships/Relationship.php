@@ -22,7 +22,10 @@ abstract class Relationship
 	protected function guessKey( string $class ): string
 	{
 		$class = $this->classBasename( $class );
-		$class = strtolower( $class ); // TODO convert PascalCase to snake_case
+
+		// convert from PascalCase to snake_case - credit: https://stackoverflow.com/a/19533226
+		$class = preg_replace( "/(?<!^)[A-Z]/", '_$0', $class );
+		$class = strtolower( $class );
 
 		return "{$class}_id";
 	}
@@ -31,7 +34,9 @@ abstract class Relationship
 	{
 		$separator_at = strrpos( $class, '\\' );
 
-		if( $separator_at !== false ) return substr( $class, $separator_at + 1 );
-		else return $class;
+		return ( $separator_at !== false
+			? substr( $class, $separator_at + 1 )
+			: $class // not in a namespace
+		);
 	}
 }

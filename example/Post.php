@@ -42,7 +42,7 @@ final class Post
 	}
 
 
-	public static function get( int $id ): static
+	public static function get( int $id ): ?static
 	{
 		$sql = static::sql();
 
@@ -56,6 +56,7 @@ final class Post
 	}
 
 	/**
+	 * @param int[] $ids
 	 * @return static[]
 	 */
 	public static function list( array $ids ): array

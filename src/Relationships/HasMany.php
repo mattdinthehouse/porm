@@ -27,15 +27,15 @@ final class HasMany extends Relationship
 
 		$method_name = $this->method_name ?? 'from' . $this->classBasename( $local_class ) . 's'; // TODO pluralise properly
 
-		
+
 		$ids = array_column( $records, $local_key );
 
 		$children = $remote_class::{$method_name}( $ids );
-		
+
 		foreach( $records as $record )
 		{
 			$record->{$local_property} = [];
-			
+
 			foreach( $children as $child )
 			{
 				if( $child->{$remote_key} === $record->{$local_key} ) $record->{$local_property}[] = $child;

@@ -40,7 +40,7 @@ final class Comment
 	}
 
 
-	public static function get( int $id ): static
+	public static function get( int $id ): ?static
 	{
 		$sql = static::sql();
 
