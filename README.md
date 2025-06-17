@@ -305,9 +305,9 @@ use PORM\Relationships\HasOne;
 public Child $child;
 ```
 
-PORM will call `Child::fromParents( $parent_ids )` with the `$id`'s of the loaded parent records.
+PORM will call `Child::fromParents( $parent_ids )` with the `$id`'s of the loaded parent records. The method call is based on a naming convention, so if you had an `Order` parent model with a `Shipment` child relation it would call `Shipment::fromOrders( ... )`.
 
-You can manually specify the local key (`$id`), remote key (`$parent_id`), and method name here too.
+You can manually specify the local key (`$id`), remote key (`$parent_id`), and method name on the attribute here too.
 
 ### Has Many
 
