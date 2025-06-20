@@ -1,6 +1,6 @@
 <?php
 
-use PORM\DB;
+use PORM\Helpers\PDO\DB;
 use PORM\Example\Post;
 
 

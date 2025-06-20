@@ -93,12 +93,12 @@ trait Model
 		return $records;
 	}
 
-	private static function fetchObject( PDOStatement|mysqli_result $stmt ): static
+	private static function fetchObject( PDOStatement|mysqli_result $stmt ): ?static
 	{
 		return match( true )
 		{
-			( $stmt instanceof PDOStatement ) => $stmt->fetchObject( static::class ),
-			( $stmt instanceof mysqli_result ) => $stmt->fetch_object( static::class ),
+			( $stmt instanceof PDOStatement ) => ( $stmt->fetchObject( static::class ) ?: null ),
+			( $stmt instanceof mysqli_result ) => ( $stmt->fetch_object( static::class ) ?: null ),
 		};
 	}
 }

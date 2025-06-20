@@ -2,7 +2,7 @@
 
 namespace PORM\Example;
 
-use PORM\DB;
+use PORM\Helpers\PDO\DB;
 use PORM\Model;
 use PORM\Relationships\BelongsTo;
 

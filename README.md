@@ -17,6 +17,14 @@ PORM works more like a "framework" by providing the mechanisms for object mappin
 * Protection from N+1 queries by default.
 * You control the type casting and property visibility.
 
+## Database support
+
+PORM supports PDO and MySQLi but leaves it up to you to manage them - you can use a Service Container, a global variable, or even the procedural `mysqli_xxx()` functions.
+
+PORM includes a pair of *optional* helper facades that you can initialise during your app's bootstrapping with:
+* PDO: `new \PORM\Helpers\PDO\DB( new PDO( ... ) )`
+* MySQLi: `new \PORM\Helpers\MySQLi\DB( new mysqli( ... ) )`
+
 ## How it works
 
 I haven't written proper docs yet so have a look at the `examples/` folder for a demo or read below for a crash course.
@@ -46,15 +54,11 @@ That's it, but keep the data types as simple scalars (see below for non-scalar T
 
 ### Getter functions
 
-It's up to you how to manage your `PDO` instance, but PORM includes a very simple singleton wrapper class that we'll use in these examples which you can initialise with `new \PORM\DB( new PDO( ... ) )` during your app's bootstrapping.
-
-You can define whatever model getters you need by adding static methods to your class that create a `PDOStatement` and pass it to `static::one()` for single-record getters or `static::many()` for an array.
+You can define whatever model getters you need by adding static methods to your class that creates a `PDOStatement` or `mysqli_result` object and passes it to `static::one()` for single-record getters or `static::many()` for an array.
 
 `static::one()` returns an instance of your class or `null` if the SQL query returned empty:
 
 ```php
-use PORM\DB;
-
 final class Person
 {
 	public static function get( int $id ): ?static
@@ -77,8 +81,6 @@ final class Person
 `static::many()` returns an array of instances:
 
 ```php
-use PORM\DB;
-
 final class Person
 {
 	/**
