@@ -14,7 +14,7 @@ trait Model
 	private readonly array $siblings;
 
 
-	private function prepare( array $siblings ): void
+	protected function prepare( array $siblings ): void
 	{
 		$this->siblings = $siblings;
 
