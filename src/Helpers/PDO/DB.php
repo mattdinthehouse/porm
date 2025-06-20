@@ -84,4 +84,52 @@ final class DB
 
 		return $stmt;
 	}
+
+	/**
+	 * Insert a row into the database and return it's ID.
+	 * ```php
+	 * $post_id = DB::insert( <<<SQL
+	 *     INSERT INTO `posts`
+	 *     SET `author_id` = :author_id,
+	 *         `title` = :title;
+	 *     SQL,
+	 *     author_id: $author_id,
+	 *     title: $title );
+	 * ```
+	 * @param string $sql
+	 * @param array $params
+	 * @return string
+	 */
+	private function insert( string $sql, ...$params ): string
+	{
+		$stmt = $this->pdo->prepare( $sql );
+
+		$stmt->execute( $params );
+
+		return $this->pdo->lastInsertId();
+	}
+
+	/**
+	 * Prepare and execute an UPDATE or DELETE query and return the number of affected rows.
+	 * ```php
+	 * $num_affected = DB::modify( <<<SQL
+	 *     UPDATE `posts`
+	 *     SET `title` = :title
+	 *     WHERE `id` = :id;
+	 *     SQL,
+	 *     id: $post_id,
+	 *     title: $new_title );
+	 * ```
+	 * @param string $sql
+	 * @param array $params
+	 * @return int
+	 */
+	private function modify( string $sql, ...$params ): int
+	{
+		$stmt = $this->pdo->prepare( $sql );
+
+		$stmt->execute( $params );
+
+		return $stmt->rowCount();
+	}
 }

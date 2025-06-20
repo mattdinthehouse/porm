@@ -49,4 +49,52 @@ final class DB
 
 		return $stmt->get_result();
 	}
+
+	/**
+	 * Insert a row into the database and return it's ID.
+	 * ```php
+	 * $post_id = DB::insert( <<<SQL
+	 *     INSERT INTO `posts`
+	 *     SET `author_id` = ?,
+	 *         `title` = ?;
+	 *     SQL,
+	 *     $author_id,
+	 *     $title );
+	 * ```
+	 * @param string $sql
+	 * @param array $params
+	 * @return int|string
+	 */
+	private function insert( string $sql, ...$params ): int|string
+	{
+		$stmt = $this->mysql->prepare( $sql );
+
+		$stmt->execute( $params );
+
+		return $this->mysql->insert_id;
+	}
+
+	/**
+	 * Prepare and execute an UPDATE or DELETE query and return the number of affected rows.
+	 * ```php
+	 * $num_affected = DB::modify( <<<SQL
+	 *     UPDATE `posts`
+	 *     SET `title` = :title
+	 *     WHERE `id` = :id;
+	 *     SQL,
+	 *     id: $post_id,
+	 *     title: $new_title );
+	 * ```
+	 * @param string $sql
+	 * @param array $params
+	 * @return int
+	 */
+	private function modify( string $sql, ...$params ): int
+	{
+		$stmt = $this->mysql->prepare( $sql );
+
+		$stmt->execute( $params );
+
+		return $stmt->affected_rows;
+	}
 }
