@@ -28,7 +28,7 @@ final class DB
 	}
 
 
-	private function prepare( string $sql, ...$params ): PDOStatement
+	public function prepare( string $sql, ...$params ): PDOStatement
 	{
 		$stmt = $this->pdo->prepare( $sql );
 
@@ -41,7 +41,7 @@ final class DB
 	}
 
 
-	private function select( string $sql, ...$params ): PDOStatement
+	public function select( string $sql, ...$params ): PDOStatement
 	{
 		$stmt = $this->pdo->prepare( $sql );
 
