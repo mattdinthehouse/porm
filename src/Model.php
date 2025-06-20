@@ -2,10 +2,11 @@
 
 namespace PORM;
 
+use mysqli_result;
 use PDOStatement;
-use PORM\Relationships\Relationship;
-use ReflectionAttribute;
 use ReflectionClass;
+use ReflectionAttribute;
+use PORM\Relationships\Relationship;
 
 trait Model
 {
@@ -64,9 +65,9 @@ trait Model
 	}
 
 
-	protected static function one( PDOStatement $stmt ): ?static
+	protected static function one( PDOStatement|mysqli_result $stmt ): ?static
 	{
-		$record = $stmt->fetchObject( static::class );
+		$record = self::fetchObject( $stmt );
 
 		if( !$record ) return null;
 
@@ -75,11 +76,11 @@ trait Model
 		return $record;
 	}
 
-	protected static function many( PDOStatement $stmt ): array
+	protected static function many( PDOStatement|mysqli_result $stmt ): array
 	{
 		$records = [];
 
-		while( $record = $stmt->fetchObject( static::class ) )
+		while( $record = self::fetchObject( $stmt ) )
 		{
 			$records[] = $record;
 		}
@@ -90,5 +91,14 @@ trait Model
 		}
 
 		return $records;
+	}
+
+	private static function fetchObject( PDOStatement|mysqli_result $stmt ): static
+	{
+		return match( true )
+		{
+			( $stmt instanceof PDOStatement ) => $stmt->fetchObject( static::class ),
+			( $stmt instanceof mysqli_result ) => $stmt->fetch_object( static::class ),
+		};
 	}
 }
