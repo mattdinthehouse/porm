@@ -7,6 +7,8 @@ use mysqli_result;
 
 /**
  * @method static \mysqli_result select( string $sql, ...$params )
+ * @method static int|string insert( string $sql, ...$params )
+ * @method static int write( string $sql, ...$params )
  */
 final class DB
 {

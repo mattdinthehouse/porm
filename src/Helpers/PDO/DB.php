@@ -8,6 +8,8 @@ use PDOStatement;
 /**
  * @method static \PDOStatement prepare( string $sql, ...$params )
  * @method static \PDOStatement select( string $sql, ...$params )
+ * @method static string insert( string $sql, ...$params )
+ * @method static int write( string $sql, ...$params )
  */
 final class DB
 {
