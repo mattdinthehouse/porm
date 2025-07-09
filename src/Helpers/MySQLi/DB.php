@@ -4,28 +4,15 @@ namespace PORM\Helpers\MySQLi;
 
 use mysqli;
 use mysqli_result;
+use PORM\Helpers\MySQLi\Facades\DB as FacadeDB;
 
-/**
- * @method static \mysqli_result select( string $sql, ...$params )
- * @method static int|string insert( string $sql, ...$params )
- * @method static int write( string $sql, ...$params )
- */
 final class DB
 {
-	private static ?self $instance = null;
-
-
 	public function __construct(
 		public readonly mysqli $mysql,
 	)
 	{
-		self::$instance = $this;
-	}
-
-
-	public static function __callStatic( string $method, array $args): mixed
-	{
-		return self::$instance->{$method}( ...$args );
+		new FacadeDB( $this, false );
 	}
 
 
@@ -43,7 +30,7 @@ final class DB
 	 * @param array $params
 	 * @return mysqli_result
 	 */
-	private function select( string $sql, ...$params ): mysqli_result
+	public function select( string $sql, ...$params ): mysqli_result
 	{
 		$stmt = $this->mysql->prepare( $sql );
 
@@ -67,7 +54,7 @@ final class DB
 	 * @param array $params
 	 * @return int|string
 	 */
-	private function insert( string $sql, ...$params ): int|string
+	public function insert( string $sql, ...$params ): int|string
 	{
 		$stmt = $this->mysql->prepare( $sql );
 
@@ -91,7 +78,7 @@ final class DB
 	 * @param array $params
 	 * @return int
 	 */
-	private function modify( string $sql, ...$params ): int
+	public function modify( string $sql, ...$params ): int
 	{
 		$stmt = $this->mysql->prepare( $sql );
 

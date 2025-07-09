@@ -4,7 +4,7 @@ namespace PORM\Example;
 
 use PDO;
 use PORM\Model;
-use PORM\Helpers\PDO\DB;
+use PORM\Helpers\PDO\Facades\DB;
 use PORM\Relationships\HasMany;
 use PORM\Relationships\CustomRelation;
 

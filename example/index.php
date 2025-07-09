@@ -9,7 +9,11 @@ chdir( '../' );
 require 'vendor/autoload.php';
 
 
-new DB(
+// Here we're booting PORM's DB helper, which in turn will set up the `PORM\Helpers\PDO\Facades\DB`
+// facade. Obviously facade's are bad, but you can put the `$db` instance into your service
+// container instead and never it. And you don't even need to use the DB helper at all, facade or
+// instance - it's just here for the examples 😉
+$db = new DB(
 	new PDO( 'mysql:host=localhost;dbname=temp', 'root', 'root' ),
 );
 

@@ -4,29 +4,15 @@ namespace PORM\Helpers\PDO;
 
 use PDO;
 use PDOStatement;
+use PORM\Helpers\PDO\Facades\DB as FacadeDB;
 
-/**
- * @method static \PDOStatement prepare( string $sql, ...$params )
- * @method static \PDOStatement select( string $sql, ...$params )
- * @method static string insert( string $sql, ...$params )
- * @method static int write( string $sql, ...$params )
- */
 final class DB
 {
-	private static ?self $instance = null;
-
-
 	public function __construct(
 		public readonly PDO $pdo,
 	)
 	{
-		self::$instance = $this;
-	}
-
-
-	public static function __callStatic( string $method, array $args): mixed
-	{
-		return self::$instance->{$method}( ...$args );
+		new FacadeDB( $this, false );
 	}
 
 
@@ -52,7 +38,7 @@ final class DB
 	 * @param array $params
 	 * @return bool|PDOStatement
 	 */
-	private function prepare( string $sql, ...$params ): PDOStatement
+	public function prepare( string $sql, ...$params ): PDOStatement
 	{
 		$stmt = $this->pdo->prepare( $sql );
 
@@ -78,7 +64,7 @@ final class DB
 	 * @param array $params
 	 * @return PDOStatement
 	 */
-	private function select( string $sql, ...$params ): PDOStatement
+	public function select( string $sql, ...$params ): PDOStatement
 	{
 		$stmt = $this->pdo->prepare( $sql );
 
@@ -102,7 +88,7 @@ final class DB
 	 * @param array $params
 	 * @return string
 	 */
-	private function insert( string $sql, ...$params ): string
+	public function insert( string $sql, ...$params ): string
 	{
 		$stmt = $this->pdo->prepare( $sql );
 
@@ -126,7 +112,7 @@ final class DB
 	 * @param array $params
 	 * @return int
 	 */
-	private function modify( string $sql, ...$params ): int
+	public function modify( string $sql, ...$params ): int
 	{
 		$stmt = $this->pdo->prepare( $sql );
 
