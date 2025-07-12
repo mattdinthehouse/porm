@@ -12,6 +12,14 @@ use PORM\Relationships\Relationship;
  */
 final class RecordSet
 {
+	/** @var array<string, array<string, Relationship>> */
+	private static array $all_relationships = [];
+
+
+	/** @var array<string, Relationship> */
+	public readonly array $relationships;
+
+
 	public function __construct(
 		/** @var class-string  */
 		public readonly string $model_class,
@@ -19,5 +27,9 @@ final class RecordSet
 		/** @var Model[] */
 		public readonly array $records,
 	)
-	{ }
+	{
+		self::$all_relationships[$this->model_class] ??= Relationship::fetchFromClass( $this->model_class );
+
+		$this->relationships = self::$all_relationships[$this->model_class];
+	}
 }

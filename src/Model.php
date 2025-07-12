@@ -4,37 +4,31 @@ namespace PORM;
 
 use mysqli_result;
 use PDOStatement;
-use PORM\Relationships\Relationship;
 
 trait Model
 {
-	private static array $relationships;
-
 	private readonly RecordSet $siblings;
 
 
-	protected function prepare( RecordSet $siblings ): void
+	protected static function prepare( RecordSet $siblings ): void
 	{
-		$this->siblings = $siblings;
-
-
-		if( !isset( self::$relationships ) )
+		foreach( $siblings->records as $record )
 		{
-			self::$relationships = Relationship::fetchFromClass( static::class );
-		}
+			$record->siblings = $siblings;
 
-		foreach( self::$relationships as $property => $_ )
-		{
-			unset( $this->{$property} );
+			foreach( $siblings->relationships as $property => $_ )
+			{
+				unset( $record->{$property} );
+			}
 		}
 	}
 
 
 	public function __get( string $property ): mixed
 	{
-		if( array_key_exists( $property, self::$relationships ) )
+		if( array_key_exists( $property, $this->siblings->relationships ) )
 		{
-			$relationship = self::$relationships[$property];
+			$relationship = $this->siblings->relationships[$property];
 
 			$relationship->load( $this->siblings->records );
 		}
@@ -51,7 +45,7 @@ trait Model
 
 		$siblings = new RecordSet( static::class, [ $record ] );
 
-		$record->prepare( $siblings );
+		self::prepare( $siblings );
 
 		return $record;
 	}
@@ -67,10 +61,7 @@ trait Model
 
 		$siblings = new RecordSet( static::class, $records );
 
-		foreach( $records as $record )
-		{
-			$record->prepare( $siblings );
-		}
+		self::prepare( $siblings );
 
 		return $records;
 	}
