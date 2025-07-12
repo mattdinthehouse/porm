@@ -2,17 +2,29 @@
 
 namespace PORM\Relationships;
 
+use ReflectionClass;
+use ReflectionAttribute;
 use ReflectionProperty;
 use RuntimeException;
 
 abstract class Relationship
 {
+	protected string $local_class;
+
 	protected ReflectionProperty $property;
 
-	public function setProperty( ReflectionProperty $property ): void
+	/**
+	 * @param class-string $local_class
+	 * @param ReflectionProperty $property
+	 * @throws RuntimeException
+	 * @return void
+	 */
+	public function setProperty( string $local_class, ReflectionProperty $property ): void
 	{
 		if( isset( $this->property ) ) throw new RuntimeException;
-		else $this->property = $property;
+		
+		$this->local_class = $local_class;
+		$this->property = $property;
 	}
 
 
@@ -38,5 +50,33 @@ abstract class Relationship
 			? substr( $class, $separator_at + 1 )
 			: $class // not in a namespace
 		);
+	}
+
+
+	public static function fetchFromClass( string $class_name ): array
+	{
+		$output = [];
+
+		$definition = new ReflectionClass( $class_name );
+
+		foreach( $definition->getProperties() as $property )
+		{
+			$relationships = $property->getAttributes( Relationship::class, ReflectionAttribute::IS_INSTANCEOF );
+
+			if( $relationships )
+			{
+				$output[$property->getName()] = [];
+
+				foreach( $relationships as $relationship )
+				{
+					$relationship = $relationship->newInstance(); // i wish i could pass constructor args...
+					$relationship->setProperty( $class_name, $property );// ... but i can't so i have to do this.
+
+					$output[$property->getName()] = $relationship;
+				}
+			}
+		}
+
+		return $output;
 	}
 }

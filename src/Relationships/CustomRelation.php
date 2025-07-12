@@ -14,7 +14,7 @@ final class CustomRelation extends Relationship
 
 	public function load( array $records ): void
 	{
-		$local_class = $this->property->getDeclaringClass()->getName(); // annoyingly this is self::class not static::class
+		$local_class = $this->local_class;
 
 		$method_name = $this->method_name;
 

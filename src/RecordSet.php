@@ -2,6 +2,8 @@
 
 namespace PORM;
 
+use PORM\Relationships\Relationship;
+
 /**
  * A container for a list of Model instances that should be considered part of a related set.
  * 
@@ -11,6 +13,10 @@ namespace PORM;
 final class RecordSet
 {
 	public function __construct(
+		/** @var class-string  */
+		public readonly string $model_class,
+
+		/** @var Model[] */
 		public readonly array $records,
 	)
 	{ }

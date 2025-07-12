@@ -18,7 +18,7 @@ final class HasOne extends Relationship
 	{
 		$local_property = $this->property->getName();
 
-		$local_class = $records[0]::class;
+		$local_class = $this->local_class;
 		$remote_class = ( (string) $this->property->getType() );
 
 		$remote_key = $this->remote_key ?? $this->guessKey( $local_class );

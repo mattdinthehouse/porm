@@ -19,7 +19,7 @@ final class HasMany extends Relationship
 	{
 		$local_property = $this->property->getName();
 
-		$local_class = $records[0]::class;
+		$local_class = $this->local_class;
 		$remote_class = $this->remote_class ?? $this->guessRemoteClass();
 
 		$remote_key = $this->remote_key ?? $this->guessKey( $local_class );

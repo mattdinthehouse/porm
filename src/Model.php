@@ -4,8 +4,6 @@ namespace PORM;
 
 use mysqli_result;
 use PDOStatement;
-use ReflectionClass;
-use ReflectionAttribute;
 use PORM\Relationships\Relationship;
 
 trait Model
@@ -22,27 +20,7 @@ trait Model
 
 		if( !isset( self::$relationships ) )
 		{
-			self::$relationships = [];
-
-			$class = new ReflectionClass( $this );
-
-			foreach( $class->getProperties() as $property )
-			{
-				$relationships = $property->getAttributes( Relationship::class, ReflectionAttribute::IS_INSTANCEOF );
-
-				if( $relationships )
-				{
-					self::$relationships[$property->getName()] = [];
-
-					foreach( $relationships as $relationship )
-					{
-						$relationship = $relationship->newInstance(); // i wish i could pass constructor args...
-						$relationship->setProperty( $property ); // ... but i can't so i have to do this.
-
-						self::$relationships[$property->getName()] = $relationship;
-					}
-				}
-			}
+			self::$relationships = Relationship::fetchFromClass( static::class );
 		}
 
 		foreach( self::$relationships as $property => $_ )
@@ -71,7 +49,9 @@ trait Model
 
 		if( !$record ) return null;
 
-		$record->prepare( new RecordSet( [ $record ] ) );
+		$siblings = new RecordSet( static::class, [ $record ] );
+
+		$record->prepare( $siblings );
 
 		return $record;
 	}
@@ -85,7 +65,7 @@ trait Model
 			$records[] = $record;
 		}
 
-		$siblings = new RecordSet( $records );
+		$siblings = new RecordSet( static::class, $records );
 
 		foreach( $records as $record )
 		{
