@@ -12,10 +12,10 @@ trait Model
 {
 	private static array $relationships;
 
-	private readonly array $siblings;
+	private readonly RecordSet $siblings;
 
 
-	protected function prepare( array $siblings ): void
+	protected function prepare( RecordSet $siblings ): void
 	{
 		$this->siblings = $siblings;
 
@@ -58,7 +58,7 @@ trait Model
 		{
 			$relationship = self::$relationships[$property];
 
-			$relationship->load( $this->siblings );
+			$relationship->load( $this->siblings->records );
 		}
 
 		return $this->{$property};
@@ -71,7 +71,7 @@ trait Model
 
 		if( !$record ) return null;
 
-		$record->prepare( [ $record ] );
+		$record->prepare( new RecordSet( [ $record ] ) );
 
 		return $record;
 	}
@@ -85,9 +85,11 @@ trait Model
 			$records[] = $record;
 		}
 
+		$siblings = new RecordSet( $records );
+
 		foreach( $records as $record )
 		{
-			$record->prepare( $records );
+			$record->prepare( $siblings );
 		}
 
 		return $records;
