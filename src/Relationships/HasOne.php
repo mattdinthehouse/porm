@@ -11,6 +11,7 @@ final class HasOne extends Relationship
 		private ?string $local_key = null,
 		private ?string $remote_key = null,
 		private ?string $method_name = null,
+		private ?string $remote_class = null,
 	)
 	{ }
 
@@ -19,7 +20,7 @@ final class HasOne extends Relationship
 		$local_property = $this->property->getName();
 
 		$local_class = $this->local_class;
-		$remote_class = ( (string) $this->property->getType() );
+		$remote_class = $this->remote_class ?? ltrim( (string) $this->property->getType(), '?' );
 
 		$remote_key = $this->remote_key ?? $this->guessKey( $local_class );
 		$local_key = $this->local_key ?? 'id';
