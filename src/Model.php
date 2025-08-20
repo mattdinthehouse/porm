@@ -24,13 +24,19 @@ trait Model
 	}
 
 
+	public function loadRelation( string $property ): void
+	{
+		$relationship = $this->siblings->relationships[$property];
+
+		$relationship->load( $this->siblings->records );
+	}
+
+
 	public function __get( string $property ): mixed
 	{
 		if( array_key_exists( $property, $this->siblings->relationships ) )
 		{
-			$relationship = $this->siblings->relationships[$property];
-
-			$relationship->load( $this->siblings->records );
+			$this->loadRelation( $property );
 		}
 
 		return $this->{$property};
