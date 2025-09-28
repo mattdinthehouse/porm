@@ -43,7 +43,7 @@ trait Model
 	}
 
 
-	protected static function one( PDOStatement|mysqli_result $stmt ): ?static
+	public static function one( PDOStatement|mysqli_result $stmt ): ?static
 	{
 		$record = self::fetchObject( $stmt );
 
@@ -56,7 +56,7 @@ trait Model
 		return $record;
 	}
 
-	protected static function many( PDOStatement|mysqli_result $stmt ): array
+	public static function many( PDOStatement|mysqli_result $stmt ): array
 	{
 		$records = [];
 
